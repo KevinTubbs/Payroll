@@ -4,13 +4,19 @@ const addEmployeesBtn = document.querySelector('#add-employees-btn');
 // Collect employee data
 const collectEmployees = function () {
   let employeenumber = 0; // initialize employee number
-  let employeesArray = []; // initialize employee arr
+  let employeesArray = []; // initialize employee array
   while (true) {
     let employee = {}; // initialize employee object
+    console.log('prompting for first name') //debug
     employee.firstName = prompt('Enter employee first name');
+    console.log("results of first name prompt" + employee.firstName); //debug 
+
     if (employee.firstName === null) break; // exit loop if user clicked "Cancel"
+    console.log("first name prompt complete: " + employee.firstName) //debug
+
     employee.lastName = prompt('Enter employee last name');
     if (employee.lastName === null) break; // exit loop if user clicked "Cancel"
+
     let salary = prompt('Enter employee salary');
     if (salary === null) break; // exit loop if user clicked "Cancel"
 
@@ -18,6 +24,7 @@ const collectEmployees = function () {
       alert('Please enter a valid number for the salary');
       continue; // skip to the next iteration of the loop
     }
+
     console.log('did we get here?') //debug
 
     employee.salary = Number(salary); // ensure salary is a number
@@ -26,9 +33,27 @@ const collectEmployees = function () {
 
     console.log('employee number ' + employeenumber + " emtered") //debug
     employeenumber++;
-  } // end of while loop
-  // TODO: Get user input to create and return an array of employee objects
-}
+
+  } // end of while loop still in collectEmployees function
+  console.log('exited loop') //debug
+
+  // sort by last name
+  employeesArray.sort(function (a, b) {
+    if (a.lastName < b.lastName) {
+      return -1;
+    }
+    if (a.lastName > b.lastName) {
+      return 1;
+    }
+    return 0;
+
+  })
+
+  for (let i = 0; i < employeesArray.length; i++) {
+    console.log(employeesArray[i]);
+  }
+} // end of collectEmployees function
+
 
 // Display the average salary
 const displayAverageSalary = function (employeesArray) {
