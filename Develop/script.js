@@ -1,61 +1,49 @@
 // Get a reference to the #add-employees-btn element
 const addEmployeesBtn = document.querySelector('#add-employees-btn');
 
-// Collect employee data
-const collectEmployees = function () {
-  let employeenumber = 0; // initialize employee number
-  let employeesArray = []; // initialize employee array
+// Function to prompt for user input and validate it
+const promptForInput = (promptMessage, validator) => {
   while (true) {
-    let employee = {}; // initialize employee object
-    console.log('prompting for first name') //debug
-    employee.firstName = prompt('Enter employee first name');
-    console.log("results of first name prompt" + employee.firstName); //debug 
-
-    if (employee.firstName === null) break; // exit loop if user clicked "Cancel"
-    console.log("first name prompt complete: " + employee.firstName) //debug
-
-    employee.lastName = prompt('Enter employee last name');
-    if (employee.lastName === null) break; // exit loop if user clicked "Cancel"
-
-    let salary = prompt('Enter employee salary');
-    if (salary === null) break; // exit loop if user clicked "Cancel"
-
-    if (isNaN(salary)) {  // check if salary is not a number 
-      alert('Please enter a valid number for the salary');
-      continue; // skip to the next iteration of the loop
+    const input = prompt(promptMessage);
+    if (input === null) {
+      return null;
     }
 
-    console.log('did we get here?') //debug
+    if (validator(input)) {
+      return input;
+    }
+    alert('Invalid input, please try again.');
+  }
+}
 
-    employee.salary = Number(salary); // ensure salary is a number
+// Collect employee data function
+const collectEmployees = function () {
+  const employeesArray = []; // initialize employee array
+  let employeenumber = 0; // initialize employee number 
+  while (true) {
+    const employee = {}; // initialize employee object
 
+    employee.firstName = promptForInput('Enter employee first name', input => input !== null && input !== '');
+    console.log(`First Name: ${employee.firstName}`);
+    if (employee.firstName === null) break; // exit loop if user clicked "Cancel"
+
+    employee.lastName = promptForInput('Enter employee last name', input => input !== null && input !== '');
+    console.log(`Last Name: ${employee.lastName}`);
+    if (employee.lastName === null) break; // exit loop if user clicked "Cancel"
+
+    const salary = promptForInput('Enter employee salary', input => input !== null && !isNaN(input));
+    console.log(`Salary: ${salary}`);
+    if (salary === null) break; // exit loop if user clicked "Cancel"
+    employee.salary = Number(salary);
     employeesArray.push(employee); // add employee object to employee array
 
     console.log('employee number ' + employeenumber + " emtered") //debug
     employeenumber++;
-
-  } // end of while loop still in collectEmployees function
-  console.log('exited loop') //debug
-
-  // sort by last name
-  employeesArray.sort(function (a, b) {
-    if (a.lastName < b.lastName) {
-      return -1;
-    }
-    if (a.lastName > b.lastName) {
-      return 1;
-    }
-    return 0;
-
-  })
-
-  for (let i = 0; i < employeesArray.length; i++) {
-    console.log(employeesArray[i]);
   }
+  return employeesArray;
 } // end of collectEmployees function
 
-
-// Display the average salary
+// Function declaration to display the average salary
 const displayAverageSalary = function (employeesArray) {
   // TODO: Calculate and display the average salary
   let sum = 0;
@@ -64,18 +52,25 @@ const displayAverageSalary = function (employeesArray) {
   }
   const average = sum / employeesArray.length;
   console.log("There are " + employeesArray.length + " employees and the average salary is " + average);
-} // end of displayAverageSalary
+}
+// function to get random employee
+const getRandomEmployee = function (employeesArray) {
+  const randomIndex = Math.floor(Math.random() * employeesArray.length);
+  const randomEmployee = employeesArray[randomIndex];
+  console.log("Random Employee: " + randomEmployee.firstName + " " + randomEmployee.lastName + " " + randomEmployee.salary);
+  return randomEmployee;
+} // end of getRandomEmployee function
 
+
+// Event Listeners
 
 if (addEmployeesBtn !== null) {
-  addEmployeesBtn.addEventListener('click', collectEmployees);
-}
-
-
-
-// Select a random employee
-const getRandomEmployee = function (employeesArray) {
-  // TODO: Select and display a random employee
+  addEmployeesBtn.addEventListener('click', () => {
+    const employees = collectEmployees();
+    console.log(employees);
+    displayAverageSalary(employees);
+    console.log(getRandomEmployee(employees));
+  });
 }
 
 /*
