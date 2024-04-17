@@ -8,7 +8,6 @@ const promptForInput = (promptMessage, validator) => {
     if (input === null) {
       return null;
     }
-
     if (validator(input)) {
       return input;
     }
@@ -24,24 +23,44 @@ const collectEmployees = function () {
     const employee = {}; // initialize employee object
 
     employee.firstName = promptForInput('Enter employee first name', input => input !== null && input !== '');
-    console.log(`First Name: ${employee.firstName}`);
+    // console.log(`First Name: ${employee.firstName}`);
     if (employee.firstName === null) break; // exit loop if user clicked "Cancel"
 
     employee.lastName = promptForInput('Enter employee last name', input => input !== null && input !== '');
-    console.log(`Last Name: ${employee.lastName}`);
+    // console.log(`Last Name: ${employee.lastName}`);
     if (employee.lastName === null) break; // exit loop if user clicked "Cancel"
 
     const salary = promptForInput('Enter employee salary', input => input !== null && !isNaN(input));
-    console.log(`Salary: ${salary}`);
+    //    console.log(`Salary: ${salary}`);
     if (salary === null) break; // exit loop if user clicked "Cancel"
     employee.salary = Number(salary);
     employeesArray.push(employee); // add employee object to employee array
 
     console.log('employee number ' + employeenumber + " emtered") //debug
     employeenumber++;
+  } // end of while loop - time to sort and display the employees
+
+  employeesArray.sort((a, b) => {
+    // ready to sort the array
+    console.log("sorting array");
+    if (a.lastName < b.lastName) {
+      return -1;
+    }
+    if (a.lastName > b.lastName) {
+      return 1;
+    }
+    return 0;
+  });
+  // now to print the array to the console
+  console.log("printing array"); //debug
+
+  for (let i = 0; i < employeesArray.length; i++) {
+    console.log(employeesArray[i]);
   }
+  console.log("array printed");//debug
   return employeesArray;
-} // end of collectEmployees function
+}
+// end of collectEmployees and sorted display function
 
 // Function declaration to display the average salary
 const displayAverageSalary = function (employeesArray) {
